@@ -11,7 +11,7 @@ export default function TodoList() {
 
   useEffect(() => {
     // Fetch tasks from the Django API
-    axios.get("http://127.0.0.1:8000/api/tasks/")
+    axios.get("https://django-int-vite-y1sq.onrender.com/api/tasks")
       .then(response => setTasks(response.data))
       .catch(error => console.error(error));
     
@@ -34,7 +34,7 @@ export default function TodoList() {
   const addTask = () => {
     if (task.trim() === "") return;
 
-    axios.post("http://127.0.0.1:8000/api/tasks/", { text: task, completed: false })
+    axios.post("https://django-int-vite-y1sq.onrender.com/api/tasks", { text: task, completed: false })
       .then(response => setTasks([...tasks, response.data]))
       .catch(error => console.error(error));
 
@@ -42,13 +42,13 @@ export default function TodoList() {
   };
 
   const removeTask = (id) => {
-    axios.delete(`http://127.0.0.1:8000/api/tasks/${id}/`)
+    axios.delete(`https://django-int-vite-y1sq.onrender.com/api/tasks${id}/`)
       .then(() => setTasks(tasks.filter(t => t.id !== id)))
       .catch(error => console.error(error));
   };
 
   const toggleComplete = (id, completed) => {
-    axios.patch(`http://127.0.0.1:8000/api/tasks/${id}/`, { completed: !completed })
+    axios.patch(`https://django-int-vite-y1sq.onrender.com/api/tasks${id}/`, { completed: !completed })
       .then(response => {
         setTasks(tasks.map(t => (t.id === id ? response.data : t)));
       })
@@ -61,7 +61,7 @@ export default function TodoList() {
   };
 
   const saveEdit = (id) => {
-    axios.patch(`http://127.0.0.1:8000/api/tasks/${id}/`, { text: editText })
+    axios.patch(`https://django-int-vite-y1sq.onrender.com/api/tasks${id}/`, { text: editText })
       .then(response => {
         setTasks(tasks.map(t => (t.id === id ? response.data : t)));
         setEditIndex(null);

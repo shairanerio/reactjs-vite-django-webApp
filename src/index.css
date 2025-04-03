@@ -34,7 +34,7 @@ h1, h2 {
   color: #f48fb1;
 }
 
-h1{
+h1 {
   text-align: center;
 }
 
@@ -82,7 +82,7 @@ li input[type="checkbox"] {
   width: 30px;
 }
 
-#editB{
+#editB {
   margin-left: 145px;
 }
 
@@ -96,6 +96,9 @@ li input[type="checkbox"] {
   gap: 8px;
 }
 
+
+
+/* Dark Mode Customization */
 .dark-mode {
   background-color: #263238;
   color: white;
@@ -112,4 +115,46 @@ li input[type="checkbox"] {
 
 .dark-mode button:hover {
   background-color: #607d8b;
+}
+
+.dark-mode h1, .dark-mode h2 {
+  color: white; /* Ensure headers are visible in dark mode */
+}
+
+.dark-mode input {
+  border: 1px solid #607d8b; /* Light border color for dark mode */
+  color: white; /* Text color for dark mode */
+  background-color: #37474f; /* Input background color for dark mode */
+}
+
+.dark-mode .completed {
+  color: #f06292; /* Completed tasks color in dark mode */
+}
+
+.dark-mode li {
+  background: #455a64; /* Darker background for list items */
+  color: white; /* Ensure the text is visible in dark mode */
+}
+
+/* Specifically target task text and checkboxes in dark mode */
+.dark-mode li input[type="checkbox"] {
+  accent-color: #f48fb1; /* Adjust checkbox color to match theme */
+}
+
+/* Ensure task text is white and visible */
+.dark-mode li span {
+  color: white; /* Ensure the task text is white */
+}
+
+.dark-mode li button {
+  background-color: #607d8b;
+}
+
+.dark-mode li button:hover {
+  background-color: #78909c;
+}
+
+/* Light mode text color for tasks */
+li span {
+  color: #455a64; /* Default text color in light mode */
 }
