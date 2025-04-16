@@ -10,12 +10,6 @@ export default function TodoList() {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    // Fetch tasks from the Django API
-    axios.get("https://pit4-appdev.onrender.com/todos")
-      .then(response => setTasks(response.data))
-      .catch(error => console.error(error));
-    
-    // Load dark mode preference from localStorage
     const savedTheme = localStorage.getItem("darkMode");
     if (savedTheme === "true") {
       setDarkMode(true);
@@ -31,42 +25,84 @@ export default function TodoList() {
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
+  const apiUrl = "https://fastapi-for-vite.onrender.com/todos/";
+
+  useEffect(() => {
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        setTasks(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+      });
+  }, []);
+
   const addTask = () => {
     if (task.trim() === "") return;
 
-    axios.post("https://pit4-appdev.onrender.com/todos", { text: task, completed: false })
-      .then(response => setTasks([...tasks, response.data]))
-      .catch(error => console.error(error));
+    const newTask = { title: task, completed: false };
 
-    setTask("");
-  };
-
-  const removeTask = (id) => {
-    axios.delete(`https://pit4-appdev.onrender.com/todos${id}/`)
-      .then(() => setTasks(tasks.filter(t => t.id !== id)))
-      .catch(error => console.error(error));
-  };
-
-  const toggleComplete = (id, completed) => {
-    axios.patch(`https://pit4-appdev.onrender.com/todos${id}/`, { completed: !completed })
-      .then(response => {
-        setTasks(tasks.map(t => (t.id === id ? response.data : t)));
+    axios
+      .post(apiUrl, newTask)
+      .then((response) => {
+        setTasks([...tasks, response.data]);
+        setTask("");
       })
-      .catch(error => console.error(error));
+      .catch((error) => {
+        console.error("Error adding task:", error);
+      });
+  };
+
+  const removeTask = (index) => {
+    const taskToRemove = tasks[index];
+
+    axios
+      .delete(`${apiUrl}${taskToRemove.id}/`)
+      .then(() => {
+        setTasks(tasks.filter((_, i) => i !== index));
+      })
+      .catch((error) => {
+        console.error("Error removing task:", error);
+      });
+  };
+
+  const toggleComplete = (index) => {
+    const updatedTask = { ...tasks[index], completed: !tasks[index].completed };
+
+    axios
+      .put(`${apiUrl}${updatedTask.id}/`, updatedTask)
+      .then((response) => {
+        const updatedTasks = tasks.map((task, i) =>
+          i === index ? response.data : task
+        );
+        setTasks(updatedTasks);
+      })
+      .catch((error) => {
+        console.error("Error toggling task completion:", error);
+      });
   };
 
   const startEditing = (index) => {
     setEditIndex(index);
-    setEditText(tasks[index].text);
+    setEditText(tasks[index].title);
   };
 
-  const saveEdit = (id) => {
-    axios.patch(`https://pit4-appdev.onrender.com/todos${id}/`, { text: editText })
-      .then(response => {
-        setTasks(tasks.map(t => (t.id === id ? response.data : t)));
+  const saveEdit = (index) => {
+    const updatedTask = { ...tasks[index], title: editText };
+
+    axios
+      .put(`${apiUrl}${updatedTask.id}/`, updatedTask)
+      .then((response) => {
+        const updatedTasks = tasks.map((task, i) =>
+          i === index ? response.data : task
+        );
+        setTasks(updatedTasks);
         setEditIndex(null);
       })
-      .catch(error => console.error(error));
+      .catch((error) => {
+        console.error("Error saving task edit:", error);
+      });
   };
 
   const filteredTasks = tasks.filter((t) => {
@@ -99,18 +135,18 @@ export default function TodoList() {
             {editIndex === index ? (
               <>
                 <input value={editText} onChange={(e) => setEditText(e.target.value)} />
-                <button onClick={() => saveEdit(t.id)}>Save</button>
+                <button onClick={() => saveEdit(index)}>Save</button>
               </>
             ) : (
               <>
                 <input
                   type="checkbox"
                   checked={t.completed}
-                  onChange={() => toggleComplete(t.id, t.completed)}
+                  onChange={() => toggleComplete(index)}
                 />
-                {t.text}
-                <button id="editB" onClick={() => startEditing(index)}>Edit</button>
-                <button onClick={() => removeTask(t.id)}>Delete</button>
+                {t.title}
+                <button onClick={() => startEditing(index)}>Edit</button>
+                <button onClick={() => removeTask(index)}>Delete</button>
               </>
             )}
           </li>
