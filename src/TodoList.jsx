@@ -42,13 +42,13 @@ export default function TodoList() {
   };
 
   const removeTask = (id) => {
-    axios.delete(`https://pit4-appdev.onrender.com/todos/${id}/`)
+    axios.delete(`https://pit4-appdev.onrender.com/todos${id}/`)
       .then(() => setTasks(tasks.filter(t => t.id !== id)))
       .catch(error => console.error(error));
   };
 
   const toggleComplete = (id, completed) => {
-    axios.patch(`https://pit4-appdev.onrender.com/todos/${id}/`, { completed: !completed })
+    axios.patch(`https://pit4-appdev.onrender.com/todos${id}/`, { completed: !completed })
       .then(response => {
         setTasks(tasks.map(t => (t.id === id ? response.data : t)));
       })
@@ -61,7 +61,7 @@ export default function TodoList() {
   };
 
   const saveEdit = (id) => {
-    axios.patch(`https://pit4-appdev.onrender.com/todos/${id}/`, { text: editText })
+    axios.patch(`https://pit4-appdev.onrender.com/todos${id}/`, { text: editText })
       .then(response => {
         setTasks(tasks.map(t => (t.id === id ? response.data : t)));
         setEditIndex(null);
