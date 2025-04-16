@@ -25,7 +25,7 @@ export default function TodoList() {
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
-  const apiUrl = "https://fastapi-for-vite.onrender.com/todos/";
+  const apiUrl = "https://pit4-appdev.onrender.com/todos/";
 
   useEffect(() => {
     axios
