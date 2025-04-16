@@ -11,7 +11,7 @@ export default function TodoList() {
 
   useEffect(() => {
     // Fetch tasks from the Django API
-    axios.get("https://pit4-appdev.onrender.com/tasks")
+    axios.get("https://pit4-appdev.onrender.com/todos")
       .then(response => setTasks(response.data))
       .catch(error => console.error(error));
     
@@ -34,7 +34,7 @@ export default function TodoList() {
   const addTask = () => {
     if (task.trim() === "") return;
 
-    axios.post("https://pit4-appdev.onrender.com/tasks", { text: task, completed: false })
+    axios.post("https://pit4-appdev.onrender.com/todos", { text: task, completed: false })
       .then(response => setTasks([...tasks, response.data]))
       .catch(error => console.error(error));
 
@@ -42,13 +42,13 @@ export default function TodoList() {
   };
 
   const removeTask = (id) => {
-    axios.delete(`https://pit4-appdev.onrender.com/tasks/${id}/`)
+    axios.delete(`https://pit4-appdev.onrender.com/todos/${id}/`)
       .then(() => setTasks(tasks.filter(t => t.id !== id)))
       .catch(error => console.error(error));
   };
 
   const toggleComplete = (id, completed) => {
-    axios.patch(`https://pit4-appdev.onrender.com/tasks/${id}/`, { completed: !completed })
+    axios.patch(`https://pit4-appdev.onrender.com/todos/${id}/`, { completed: !completed })
       .then(response => {
         setTasks(tasks.map(t => (t.id === id ? response.data : t)));
       })
@@ -61,7 +61,7 @@ export default function TodoList() {
   };
 
   const saveEdit = (id) => {
-    axios.patch(`https://pit4-appdev.onrender.com/tasks/${id}/`, { text: editText })
+    axios.patch(`https://pit4-appdev.onrender.com/todos/${id}/`, { text: editText })
       .then(response => {
         setTasks(tasks.map(t => (t.id === id ? response.data : t)));
         setEditIndex(null);
