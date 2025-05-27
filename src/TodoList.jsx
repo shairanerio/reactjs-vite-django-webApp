@@ -25,7 +25,7 @@ export default function TodoList() {
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
-  const apiUrl = "https://pit4-appdev.onrender.com/todos/";
+  const apiUrl = "https://pit4-appdev-1.onrender.com/todos/";
 
   useEffect(() => {
     axios
